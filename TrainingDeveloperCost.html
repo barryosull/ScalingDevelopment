@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Training Developer Cost</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style type="text/css">
+    body {
+        font-family: arial;
+    }
+    
+    .frame {
+        margin:20px;
+        width: 500px;
+    }
+    
+    input {
+        border: 0px;
+    }
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css" />
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+<script type="text/javascript">
+    
+$(function(){
+
+    calculateTime();
+    $('input').change(function(){
+        calculateTime();
+    });   
+    
+    $(".slider").each(function(index, elem) {
+        slider($(this));
+    });
+});
+
+function calculateTime()
+{
+    console.log('Calc time');
+    var number_of_students = $('#people').val();
+    var time_per_person = $('#time_per_person').val();
+    var communication_ability = $('#communication_ability').val()/10;
+    var training_time = $('#training_time').val();
+    
+    var group_training = time_per_person/2;
+    var one_on_one_training = (time_per_person/2) * number_of_students;
+    var hours_per_day = group_training + one_on_one_training;
+    
+    var months_to_train = Math.max(1/communication_ability, 1) * training_time;
+    
+    $('#hours_per_day').html(Math.min(hours_per_day, 8));
+    
+    var months_plus_overflow = months_to_train * Math.max(hours_per_day/8, 1);
+    
+    $('#months').html(months_plus_overflow.toFixed(2));
+}
+
+function slider($elem)
+{
+    var $input = $($elem.attr('data-target-input'));
+    $elem.slider({
+        value: parseInt($input.attr('value')),
+        min: parseInt($input.attr('data-min')),
+        max: parseInt($input.attr('data-max')),
+        slide: handle_slider_update
+    });
+}
+
+function handle_slider_update(event, ui)
+{
+    var input_id = $(this).attr('data-target-input');
+    $(input_id).val(ui.value);
+    calculateTime();
+}
+    
+</script>
+
+</head>
+<body>
+    <div class="frame">
+        Number of people: <input data-min="1" data-max="7" value="1" type="text" readonly="readonly" id="people">
+        <div class="slider" data-target-input="#people"></div>
+        Hours spent per person per day: <input data-min="1" data-max="8" value="2" type="text" readonly="readonly" id="time_per_person"><br>
+        <div class="slider" data-target-input="#time_per_person"></div>
+        Student communication ability: <input data-min="1" data-max="10" value="10" type="text" readonly="readonly"  id="communication_ability"><br>
+        <div class="slider" data-target-input="#communication_ability"></div>
+        AVG months for training: <input data-min="1" data-max="12" value="1" id="training_time"><br>
+        <div class="slider" data-target-input="#training_time"></div>
+        <br><h4>Result: <span id="hours_per_day"></span>hrs per day for <span id="months"></span>months</h4>
+    </div>
+</body>
+</html>
