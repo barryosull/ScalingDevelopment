@@ -42,20 +42,20 @@ function calculateTime()
     console.log('Calc time');
     var number_of_students = $('#people').val();
     var time_per_person = $('#time_per_person').val();
-    var communication_ability = $('#communication_ability').val()/10;
+    var learning_ability = $('#learning_ability').val()/10;
     var training_time = $('#training_time').val();
     
     var group_training = time_per_person/2;
     var one_on_one_training = (time_per_person/2) * number_of_students;
     var hours_per_day = group_training + one_on_one_training;
     
-    var months_to_train = Math.max(1/communication_ability, 1) * training_time;
+    var months_to_train = Math.max(1/learning_ability, 1) * training_time;
     
     $('#hours_per_day').html(Math.min(hours_per_day, 8));
     
     var months_plus_overflow = months_to_train * Math.max(hours_per_day/8, 1);
     
-    $('#months').html(months_plus_overflow.toFixed(2));
+    $('#months').html(months_plus_overflow.toFixed(1));
 }
 
 function slider($elem)
@@ -81,13 +81,16 @@ function handle_slider_update(event, ui)
 </head>
 <body>
     <div class="frame">
+        
+        <p>Calculate the time spent by a senior developer training new developers</p>
+        
         Number of people: <input data-min="1" data-max="7" value="1" type="text" readonly="readonly" id="people">
         <div class="slider" data-target-input="#people"></div>
         Hours spent per person per day: <input data-min="1" data-max="8" value="2" type="text" readonly="readonly" id="time_per_person"><br>
         <div class="slider" data-target-input="#time_per_person"></div>
-        Student communication ability: <input data-min="1" data-max="10" value="10" type="text" readonly="readonly"  id="communication_ability"><br>
-        <div class="slider" data-target-input="#communication_ability"></div>
-        AVG months for training: <input data-min="1" data-max="12" value="1" id="training_time"><br>
+        Student learning ability: <input data-min="1" data-max="10" value="10" type="text" readonly="readonly" id="learning_ability"><br>
+        <div class="slider" data-target-input="#learning_ability"></div>
+        AVG months for training: <input data-min="1" data-max="12" value="1" type="text" readonly="readonly" id="training_time"><br>
         <div class="slider" data-target-input="#training_time"></div>
         <br><h4>Result: <span id="hours_per_day"></span>hrs per day for <span id="months"></span>months</h4>
     </div>
